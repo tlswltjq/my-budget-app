@@ -4,7 +4,15 @@ import command
 
 def handle_add(args):
     print("[거래 추가]", args)
-
+    command.add_transaction(
+        type_str=args.type,
+        amount=args.amount,
+        category=args.category,
+        memo=args.memo,
+        tag=args.tag,
+        date_val=args.date
+    )
+    
 def handle_list(args):
     print(f"[거래 목록] limit: {args.limit}")
 
@@ -52,6 +60,12 @@ def main():
 
     # --- add ---
     parser_add = subparsers.add_parser("add", help="거래 추가")
+    parser_add.add_argument("--type", choices=["income", "expense"], required=True, help="유형 (income/expense)")
+    parser_add.add_argument("--amount", type=int, required=True, help="금액")
+    parser_add.add_argument("--category", type=str, required=True, help="카테고리명")
+    parser_add.add_argument("--memo", type=str, required=True, help="메모 내용")
+    parser_add.add_argument("--tag", type=str, required=True, help="태그명")
+    parser_add.add_argument("--date", type=parse_date, default=datetime.now(), help="날짜 (YYYY-MM-DD, 기본값: 오늘)")
     parser_add.set_defaults(func=handle_add)
 
     # --- list ---

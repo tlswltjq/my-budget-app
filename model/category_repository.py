@@ -5,7 +5,7 @@ class CategoryRepository:
     # TODO : 실제 파일과 연결 필요 
     mock = [Category("식비"), Category("교통비"), Category("취미")]
     @classmethod
-    def save(cls, category: Category) -> None:
+    def save(cls, category: Category) -> Category:
         pass
 
     @classmethod
