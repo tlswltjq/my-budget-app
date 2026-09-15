@@ -1,5 +1,6 @@
 import argparse
 from datetime import datetime, date
+import command
 
 def handle_add(args):
     print("[거래 추가]", args)
@@ -18,6 +19,7 @@ def handle_budget(args):
 
 def handle_category(args):
     print(f"[카테고리 관리] 액션: {args.action}")
+    print(command.get_categories(args.action))
 
 def handle_import(args):
     print(f"[데이터 임포트] 출처: {args.from_path}")

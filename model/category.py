@@ -9,3 +9,9 @@ class Category :
             raise ValueError("카테고리 이름은 비워둘 수 없습니다.")
         
         self.name = self.name.strip()
+
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return self.name
