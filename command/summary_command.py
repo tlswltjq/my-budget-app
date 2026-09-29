@@ -14,6 +14,7 @@ class SummaryCommand(BaseCommand):
         parser.add_argument("--top", type=int, default=3, help="지출 상위 카테고리 수 (기본값: 3)")
 
     def execute(self, args: argparse.Namespace) -> int:
+        # summary: 월별 수입, 지출, 예산, 상위 지출 카테고리를 출력함
         summary = self.service.monthly(args.month, args.top)
         if summary.count == 0:
             print("데이터 없음")

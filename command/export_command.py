@@ -16,6 +16,7 @@ class ExportCommand(BaseCommand):
         parser.add_argument("--to", dest="to_day", help="종료일 YYYY-MM-DD")
 
     def execute(self, args: argparse.Namespace) -> int:
+        # export: 선택한 기간의 거래를 CSV 파일로 내보냄
         count = self.service.export_csv(args.out, args.month, args.from_day, args.to_day)
         print(f"[완료] {args.out} ({count} records)")
         return 0

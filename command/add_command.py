@@ -15,6 +15,7 @@ class AddCommand(BaseCommand):
         parser.description = "거래를 대화형으로 추가합니다. 카테고리를 먼저 등록하세요."
 
     def execute(self, args: argparse.Namespace) -> int:
+        # add: 입력받은 날짜, 타입, 카테고리, 금액 등으로 거래를 등록함
         day = input("날짜(YYYY-MM-DD): ")
         type_name = input("타입(income/expense): ")
         category = input("카테고리: ")

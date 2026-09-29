@@ -13,6 +13,7 @@ class ImportCommand(BaseCommand):
         parser.add_argument("--from", dest="from_path", required=True, help="UTF-8 CSV 경로")
 
     def execute(self, args: argparse.Namespace) -> int:
+        # import: CSV 거래를 가져오고 처리 결과를 출력함
         result = self.service.import_csv(args.from_path)
         if result.duplicate_file:
             print("[이미 가져온 파일] 체크섬이 동일합니다.")

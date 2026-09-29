@@ -19,6 +19,7 @@ class UpdateCommand(BaseCommand):
         parser.add_argument("--type", choices=("income", "expense"))
 
     def execute(self, args: argparse.Namespace) -> int:
+        # update: 지정한 거래에서 전달된 필드만 수정함
         transaction_id = parse_id(args.id)
         changes = {
             name: getattr(args, name)

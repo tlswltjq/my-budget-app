@@ -18,10 +18,13 @@ class BudgetCommand(BaseCommand):
         show_parser.add_argument("--month", required=True, help="YYYY-MM")
 
     def execute(self, args: argparse.Namespace) -> int:
+        # budget: 월 예산 설정 또는 조회 명령을 처리함
         if args.action == "set":
+            # budget set: 해당 월의 예산을 저장함
             budget = self.service.set(args.month, args.amount)
             print(f"[저장 완료] {budget.month} 예산 {budget.amount.amount}원")
         else:
+            # budget show: 해당 월의 예산을 조회해 출력함
             budget = self.service.get(args.month)
             if budget is None:
                 print(f"[없는 데이터] {args.month} 예산")

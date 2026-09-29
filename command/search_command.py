@@ -22,6 +22,7 @@ class SearchCommand(BaseCommand):
         parser.add_argument("--tag", help="태그")
 
     def execute(self, args: argparse.Namespace) -> int:
+        # search: 지정한 조건에 맞는 거래를 조회해 출력함
         filters = SearchFilters(
             from_date=parse_day(args.from_day) if args.from_day else None,
             to_date=parse_day(args.to_day) if args.to_day else None,
