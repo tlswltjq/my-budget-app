@@ -27,6 +27,8 @@ from service.csv_service import ExportService, ImportService
 from service.summary_service import SummaryService
 from service.transaction_service import TransactionService
 
+DEFAULT_DATA_DIR = "./data"
+
 
 def display_id(transaction_id: int) -> str:
     return f"TX-{transaction_id:06d}"
@@ -65,7 +67,11 @@ class CommandArgumentParser(argparse.ArgumentParser):
 @handle_cli_errors
 def main(argv: Sequence[str] | None = None) -> int:
     parser = CommandArgumentParser(description="파일 기반 가계부")
-    parser.add_argument("--data-dir", default="./data", help="JSONL 저장 폴더 (기본값: ./data)")
+    parser.add_argument(
+        "--data-dir",
+        default=DEFAULT_DATA_DIR,
+        help=f"JSONL 저장 폴더 (기본값: {DEFAULT_DATA_DIR})",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
     for name, command_class, help_text in COMMANDS:
         command_parser = subparsers.add_parser(name, help=help_text)
