@@ -1,13 +1,14 @@
 import argparse
+from typing import Callable
 
 from command.base_command import BaseCommand
-from command.common import display_id
 from service.transaction_service import TransactionService
 
 
 class AddCommand(BaseCommand):
-    def __init__(self, service: TransactionService) -> None:
+    def __init__(self, service: TransactionService, display_id: Callable[[int], str]) -> None:
         self.service = service
+        self.display_id = display_id
 
     @classmethod
     def configure_parser(cls, parser: argparse.ArgumentParser) -> None:
@@ -21,5 +22,5 @@ class AddCommand(BaseCommand):
         memo = input("메모(선택): ")
         tags = input("태그(쉼표로 구분, 없으면 엔터): ")
         transaction = self.service.add(day, type_name, category, amount, memo, tags)
-        print(f"[저장 완료] id={display_id(transaction.id)}")
+        print(f"[저장 완료] id={self.display_id(transaction.id)}")
         return 0

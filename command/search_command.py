@@ -1,14 +1,16 @@
 import argparse
+from typing import Callable
 
 from command.base_command import BaseCommand
-from command.common import format_transaction
+from model.transaction import Transaction
 from service.transaction_service import SearchFilters, TransactionService
 from service.validation import parse_day
 
 
 class SearchCommand(BaseCommand):
-    def __init__(self, service: TransactionService) -> None:
+    def __init__(self, service: TransactionService, formatter: Callable[[Transaction], str]) -> None:
         self.service = service
+        self.formatter = formatter
 
     @classmethod
     def configure_parser(cls, parser: argparse.ArgumentParser) -> None:
@@ -30,7 +32,7 @@ class SearchCommand(BaseCommand):
         )
         found = False
         for transaction in self.service.search(filters):
-            print(format_transaction(transaction))
+            print(self.formatter(transaction))
             found = True
         if not found:
             print("검색 결과가 없습니다.")
