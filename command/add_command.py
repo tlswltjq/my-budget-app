@@ -3,6 +3,7 @@ from typing import Callable
 
 from command.base_command import BaseCommand
 from service.transaction_service import TransactionService
+from service.validation import parse_day, parse_positive_int, parse_type
 
 
 class AddCommand(BaseCommand):
@@ -16,10 +17,14 @@ class AddCommand(BaseCommand):
 
     def execute(self, args: argparse.Namespace) -> int:
         # add: 입력받은 날짜, 타입, 카테고리, 금액 등으로 거래를 등록함
-        day = input("날짜(YYYY-MM-DD): ")
-        type_name = input("타입(income/expense): ")
-        category = input("카테고리: ")
-        amount = input("금액(양수): ")
+        day = input("날짜(YYYY-MM-DD, *필수*): ")
+        parse_day(day)
+        type_name = input("타입(income/expense, *필수*): ")
+        parse_type(type_name)
+        category = input("카테고리(*필수*): ")
+        self.service.require_category(category)
+        amount = input("금액(양수, *필수*): ")
+        parse_positive_int(amount, "금액")
         memo = input("메모(선택): ")
         tags = input("태그(쉼표로 구분, 없으면 엔터): ")
         transaction = self.service.add(day, type_name, category, amount, memo, tags)

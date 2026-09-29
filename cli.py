@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Sequence
 
@@ -53,15 +54,28 @@ COMMANDS = (
 )
 
 
+class CommandArgumentParser(argparse.ArgumentParser):
+    def error(self, message: str) -> None:
+        if getattr(self, "show_help_on_error", False):
+            self.print_help(sys.stderr)
+            self.exit(2, f"\n{self.prog}: error: {message}\n힌트: python3 {self.prog} -h\n")
+        super().error(message)
+
+
 @handle_cli_errors
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="파일 기반 가계부")
+    parser = CommandArgumentParser(description="파일 기반 가계부")
     parser.add_argument("--data-dir", default="./data", help="JSONL 저장 폴더 (기본값: ./data)")
     subparsers = parser.add_subparsers(dest="command", required=True)
     for name, command_class, help_text in COMMANDS:
         command_parser = subparsers.add_parser(name, help=help_text)
         command_class.configure_parser(command_parser)
-    args = parser.parse_args(argv)
+        if name == "category":
+            category_parser = command_parser
+    args, unknown = parser.parse_known_args(argv)
+    if unknown:
+        error_parser = category_parser if args.command == "category" else parser
+        error_parser.error(f"unrecognized arguments: {' '.join(unknown)}")
 
     data_dir = Path(args.data_dir)
     transaction_path = data_dir / "transactions.jsonl"

@@ -10,12 +10,15 @@ class CategoryCommand(BaseCommand):
 
     @classmethod
     def configure_parser(cls, parser: argparse.ArgumentParser) -> None:
+        parser.show_help_on_error = True
         subparsers = parser.add_subparsers(dest="action", required=True)
         add_parser = subparsers.add_parser("add", help="카테고리 추가")
         add_parser.add_argument("--name", help="카테고리명 (생략하면 입력)")
-        subparsers.add_parser("list", help="카테고리 목록")
+        list_parser = subparsers.add_parser("list", help="카테고리 목록")
         remove_parser = subparsers.add_parser("remove", help="카테고리 삭제")
         remove_parser.add_argument("--name", help="삭제할 카테고리명 (생략하면 입력)")
+        for action_parser in (add_parser, list_parser, remove_parser):
+            action_parser.show_help_on_error = True
 
     def execute(self, args: argparse.Namespace) -> int:
         # category: 등록, 목록 조회, 삭제 명령을 처리함

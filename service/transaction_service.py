@@ -36,7 +36,7 @@ class TransactionService:
         self.categories = categories
         self.metadata = metadata
 
-    def _category(self, name: str) -> Category:
+    def require_category(self, name: str) -> Category:
         category = self.categories.find_by_name(name)
         if category is None:
             raise ValueError(f"미등록 카테고리 '{name}'입니다. category add로 먼저 등록하세요.")
@@ -48,7 +48,7 @@ class TransactionService:
     ) -> Transaction:
         parsed_day = parse_day(day)
         parsed_type = parse_type(type_name)
-        category = self._category(category_name)
+        category = self.require_category(category_name)
         money = Money(parse_positive_int(amount, "금액"))
         parsed_tags = Tags.from_csv(tags)
         transaction_id = self.metadata.reserve_ids(1, self.transactions.max_id() + 1)[0]
@@ -90,7 +90,7 @@ class TransactionService:
         if "type" in changes:
             fields["type"] = parse_type(changes["type"])
         if "category" in changes:
-            fields["category"] = self._category(changes["category"])
+            fields["category"] = self.require_category(changes["category"])
         if "amount" in changes:
             fields["amount"] = Money(parse_positive_int(changes["amount"], "금액"))
         if "memo" in changes:
